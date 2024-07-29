@@ -29,7 +29,7 @@ function GetEnergy()
             NowEnergy = NowEnergy + peripheral.wrap(Buffer.prefix .. Buffer.id[value3]).getEnergy()*X
         end
             
-        drawPercent(Monitor, Name, value1, NowEnergy/MaxEnergy)
+        drawPercent(MainMonitorName, Name, value1, math.floor(NowEnergy/MaxEnergy*100))
     end
 end
 
@@ -38,10 +38,11 @@ function drawPercent(monitorName, generatorName, index, percent)
     width, height = monitor.getSize()
     
     onePercent = width/100
-    displayPercent = onePercent*percent*100
+    displayPercent = onePercent*percent
 
     monitor.setCursorPos(1, index*2-1)
-    monitor.write(string.format("Generator: %s %s", generatorName, displayPercent))
+    monitor.clearLine()
+    monitor.write(string.format("Generator: %s %s%%", generatorName, displayPercent))
     
     for x=0, displayPercent do
         monitor.setCursorPos(x, index*2)
@@ -51,5 +52,5 @@ end
 
 while true do
     GetEnergy()
-    Sleep(0.1)
+    sleep(0.1)
 end
