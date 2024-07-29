@@ -9,19 +9,19 @@ local database = {
 
 function Reader() 
         for value1=1, #database do 
+        
             Row = database[value1]
+            Buffer = Row.buffer
         
             Name = Row.name
             Monitor = Row.monitor
         
             MaxEnergy = 0
             NowEnergy = 0
-            for value2=1, #Row.buffer do
-                Buffer = Row.buffer
-                MaxEnergy = MaxEnergy + Data.volume
-                for value3=1, #Buffer.id do
-                    NowEnergy = NowEnergy + peripheral.wrap(Buffer.prefix+Buffer.id.value3)
-                end
+        
+            MaxEnergy = Buffer.volume * #Buffer.id
+            for value3=1, #Buffer.id do
+                NowEnergy = NowEnergy + peripheral.wrap(Buffer.prefix .. Buffer.id[value3])
             end
             
             print(MaxEnergy/NowEnergy)
@@ -29,4 +29,3 @@ function Reader()
 end
 
 Reader()
-This paste expires in <1 hour. Public IP access. Share whatever you see with others in seconds with Context.Terms of ServiceReport this
