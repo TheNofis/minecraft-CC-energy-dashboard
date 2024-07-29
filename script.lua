@@ -26,26 +26,30 @@ function GetEnergy()
         
         MaxEnergy = Buffer.volume * #Buffer.id
         for value3=1, #Buffer.id do
-            NowEnergy = NowEnergy + peripheral.wrap(Buffer.prefix .. Buffer.id[value3])*X
+            NowEnergy = NowEnergy + peripheral.wrap(Buffer.prefix .. Buffer.id[value3]).getEnergy()*X
         end
             
-        drawPercent(Monitor, value1, MaxEnergy/NowEnergy)
+        drawPercent(Monitor, Name, value1, NowEnergy/MaxEnergy)
     end
 end
 
-function drawPercent(monitorName, index, percent)
-    --monitor.setCursorPos(x, index*2)
+function drawPercent(monitorName, generatorName, index, percent)
     monitor = peripheral.wrap(monitorName)
     width, height = monitor.getSize()
-
-    onePercent = width/100
     
-    for x=0, onePercent*percent do
+    onePercent = width/100
+    displayPercent = onePercent*percent*100
+
+    monitor.setCursorPos(1, index*2-1)
+    monitor.write(string.format("Generator: %s %s", generatorName, displayPercent))
+    
+    for x=0, displayPercent do
+        monitor.setCursorPos(x, index*2)
         monitor.blit(" ", "e", "e")
-        
     end
 end
 
-while true then
+while true do
     GetEnergy()
+    Sleep(0.1)
 end
